@@ -82,6 +82,13 @@ PRIVATE
   ZLIB::ZLIB
 )
 
+if(ORE)
+  target_sources(discio PRIVATE OREBlob.cpp OREBlob.h)
+  # shortcut: the system libraries a Rust staticlib needs on Linux
+  # (rustc --print native-static-libs); other platforms need theirs
+  target_link_libraries(discio PUBLIC "${SMELT_DIR}/target/release/libsmelt.a" pthread dl m rt util)
+endif()
+
 if(MSVC)
   # Add precompiled header
   target_link_libraries(discio PRIVATE use_pch)

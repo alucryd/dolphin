@@ -195,7 +195,11 @@ void retro_get_system_info(retro_system_info* info)
   }();
 
   info->need_fullpath = true;
+#ifdef HAVE_ORE
+  info->valid_extensions = "elf|dol|gcm|iso|tgc|wbfs|ciso|gcz|wad|wia|rvz|ore|m3u";
+#else
   info->valid_extensions = "elf|dol|gcm|iso|tgc|wbfs|ciso|gcz|wad|wia|rvz|m3u";
+#endif
   info->library_version = version_str.c_str();
   info->library_name = "dolphin-emu";
   info->block_extract = true;

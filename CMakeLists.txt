@@ -121,6 +121,7 @@ option(ENABLE_AUTOUPDATE "Enables support for automatic updates" ON)
 option(USE_RETRO_ACHIEVEMENTS "Enables integration with retroachievements.org" ON)
 option(ENABLE_CCACHE "Enables CCache compiler cache" OFF)
 option(LIBRETRO "Build as a libretro library" OFF)
+option(ORE "Read ORE images through libsmelt; set SMELT_DIR to oxyromon's crates/smelt-rs, built with cargo build --release" OFF)
 
 # Maintainers: if you consider blanket disabling this for your users, please
 # consider the following points:
@@ -500,6 +501,14 @@ if(LIBRETRO)
   set(USE_RETRO_ACHIEVEMENTS OFF CACHE BOOL "" FORCE)
   set(USE_UPNP OFF CACHE BOOL "" FORCE)
   add_definitions(-D__LIBRETRO__)
+endif()
+
+if(ORE)
+  add_definitions(-DHAVE_ORE)
+  include_directories("${SMELT_DIR}/include")
+endif()
+
+if(LIBRETRO)
   check_and_add_flag(FPIC -fpic)
   if(APPLE)
     set(MACOS_CODE_SIGNING OFF CACHE BOOL "" FORCE)

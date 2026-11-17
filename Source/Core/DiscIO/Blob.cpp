@@ -18,6 +18,9 @@
 #include "DiscIO/DirectoryBlob.h"
 #include "DiscIO/FileBlob.h"
 #include "DiscIO/NFSBlob.h"
+#ifdef HAVE_ORE
+#include "DiscIO/OREBlob.h"
+#endif
 #include "DiscIO/SplitFileBlob.h"
 #include "DiscIO/TGCBlob.h"
 #include "DiscIO/WIABlob.h"
@@ -55,6 +58,8 @@ std::string GetName(BlobType blob_type, bool translate)
     return "NFS";
   case BlobType::SPLIT_PLAIN:
     return translate_str("Multi-part ISO");
+  case BlobType::ORE:
+    return "ORE";
   default:
     return "";
   }
@@ -242,6 +247,10 @@ std::unique_ptr<BlobReader> CreateBlobReader(const std::string& filename)
   case NFS_MAGIC:
     return NFSFileReader::Create(std::move(file), filename);
   default:
+#ifdef HAVE_ORE
+    if (IsOREMagic(magic))
+      return OREFileReader::Create(filename);
+#endif
     if (auto directory_blob = DirectoryBlobReader::Create(filename))
       return std::move(directory_blob);
     if (auto split_blob = SplitPlainFileReader::Create(filename))

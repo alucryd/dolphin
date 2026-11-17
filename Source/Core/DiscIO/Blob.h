@@ -42,6 +42,7 @@ enum class BlobType
   MOD_DESCRIPTOR,
   NFS,
   SPLIT_PLAIN,
+  ORE,
 };
 
 // If you convert an ISO file to another format and then call GetDataSize on it, what is the result?
